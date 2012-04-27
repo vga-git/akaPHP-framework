@@ -1,9 +1,10 @@
 <?php
+error_reporting(E_ALL);
 // This client root
 define('ROOT_DIR', realpath(__DIR__ . '/..'));
 
 // The framework root
-define('FRAMEWORK_ROOT', '/home/vgar/dev/php/lab/akaPHP-framework');
+define('FRAMEWORK_ROOT', ROOT_DIR . '../../akaPHP');
 
 // Include the loader
 include_once(FRAMEWORK_ROOT . '/org/akaPHP/core/Loader.php');
