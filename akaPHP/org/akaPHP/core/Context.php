@@ -49,14 +49,17 @@ namespace org\akaPHP\core {
          * 
          * @return void
          */
-        public function dispatch() {
+        public function dispatch($isRedirection = false) {
             $routing = ucfirst(str_replace('/', '', $_SERVER['REQUEST_URI']));
+            
+            if ($isRedirection) { header('Location: ' . $routing); }
+            
             $argsStart = strpos($routing, '?');
 
             if (is_numeric($argsStart)) {
                 $routing = substr($routing, 0, $argsStart);
             }
-
+            
             if ($routing === self::ROOT || $routing === '') {
                 $this->_runModule('Welcome');
             } else {

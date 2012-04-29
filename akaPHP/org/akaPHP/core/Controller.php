@@ -5,19 +5,20 @@ namespace org\akaPHP\core {
      * Abstract to create a controller from 
      */
     abstract class Controller {
-        protected 
-            $context,
-            $facade,
-            $template = NULL;
+        protected
+            $template = NULL,
+            $response;
 
         /**
          * implementation method called in execute
+         * 
+         * @param Request $request the request object
          * 
          * @see execute() 
          * 
          * @return void
          */
-        protected abstract function handleRequest();
+        protected abstract function handleRequest(Request $request, AppFacade $facade);
 
         /**
          * Execute method of the implementation
@@ -25,10 +26,6 @@ namespace org\akaPHP\core {
          * @return void 
          */
         public function execute() {
-            // provide shortcuts for the client
-            $this->context = Context::getInstance();
-            $this->facade = $this->context->getFacade();
-
             // top object running this method
             $runner = str_replace("\\", "/", get_class($this));
 
@@ -42,7 +39,10 @@ namespace org\akaPHP\core {
             $this->title="default application";
 
             // calls the client implementation (the client set the template)
-            $this->handleRequest();
+            $this->handleRequest(
+                Context::getInstance()->getRequest(),
+                Context::getInstance()->getFacade()
+            );
 
             if ($this->template) {
                 // defines the response content

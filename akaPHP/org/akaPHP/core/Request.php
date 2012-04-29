@@ -9,7 +9,7 @@ namespace org\akaPHP\core {
             POST = 'POST';
         
         private $_params = array();
-        
+        private $_reqMethod;
         /*
          * Default constructor
          */
@@ -26,6 +26,10 @@ namespace org\akaPHP\core {
          */
         public function hasParam($paramName) {
             return array_key_exists($paramName, $this->_params);
+        }
+        
+        public function isPostBack() {
+            return ($this->_reqMethod === self::POST);
         }
         
         /**

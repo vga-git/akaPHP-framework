@@ -40,6 +40,12 @@ namespace org\akaPHP\core {
             });
         }
         
+        public function redirect($routing) {
+            $_SERVER['REQUEST_URI'] = $routing;
+            Context::getInstance()->shutdown();
+            Context::getInstance($this)->dispatch(true);
+        }
+        
         /**
          * Returns the DbManager instance or its derivate one
          * 
