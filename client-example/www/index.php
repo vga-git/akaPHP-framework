@@ -3,17 +3,17 @@ error_reporting(E_ALL);
 // This client root
 define('ROOT_DIR', realpath(__DIR__ . '/..'));
 
-// The framework root
-define('FRAMEWORK_ROOT', ROOT_DIR . '../../akaPHP');
-
 // Include the loader
-include_once(FRAMEWORK_ROOT . '/org/akaPHP/core/Loader.php');
+include_once(ROOT_DIR . '/../akaPHP/org/akaPHP/core/Loader.php');
 
 use app\lib;
 use org\akaPHP\core;
 
 // Init the loader
-core\Loader::init();
+$loader = core\Loader::init();
+
+$loader->addRoute(ROOT_DIR);
+$loader->addRoute(ROOT_DIR . '/../akaPHP');
 
 //startup Application
 $appFacade = new lib\ApplicationFacade(new cfg\WebConfig());
