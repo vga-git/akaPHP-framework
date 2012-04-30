@@ -43,8 +43,7 @@ namespace org\akaPHP\core {
         public function redirect($routing) {
             $_SERVER['REQUEST_URI'] = $routing;
             Context::getInstance()->shutdown();
-            // TODO : find another way to get the root url...
-            header('Location: ' . $this->config->getRootUrl() . urldecode($routing), true);
+            header('Location: ' . 'http://' . $_SERVER['SERVER_NAME'] . '/' . urldecode($routing), true);
         }
 
         /**

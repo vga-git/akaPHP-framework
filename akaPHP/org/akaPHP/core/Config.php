@@ -14,8 +14,6 @@ namespace org\akaPHP\core {
          * @return array the database information associative array.
          */
         public abstract function getDatabaseInfo();
-
-        public abstract function getRootUrl();
     }
 }
 
