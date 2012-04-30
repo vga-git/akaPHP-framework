@@ -12,6 +12,10 @@ namespace cfg
                 'password' => 'akaPHP'
             );
         }
+
+        public function getRootUrl() {
+            return 'http://akaphptest.localhost/';
+        }
     }
 }
 ?>

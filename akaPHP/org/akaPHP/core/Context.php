@@ -52,7 +52,10 @@ namespace org\akaPHP\core {
         public function dispatch($isRedirection = false) {
             $uri = $_SERVER['REQUEST_URI'];
 
-            if ($isRedirection) { header('Location: ' . $uri); }
+            if ($isRedirection) {
+                header('Location: ' . urldecode($uri), true);
+                return;
+            }
 
             $argsStart = strpos($uri, '?');
 
@@ -62,7 +65,11 @@ namespace org\akaPHP\core {
 
             $routingTokens = explode('/', $uri);
 
-            $module = ucfirst($routingTokens[1]);
+            $module = '';
+            if (count($routingTokens) > 1) {
+                $module = ucfirst($routingTokens[1]);
+            }
+
             $action = '';
             if (count($routingTokens) > 2) {
                 $action = $routingTokens[2];

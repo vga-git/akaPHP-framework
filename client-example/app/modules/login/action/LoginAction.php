@@ -35,7 +35,9 @@ namespace app\modules\login\action {
         }
 
         protected function handleRequestLogoff(core\Request $request, core\AppFacade $facade) {
-            // TODO put the code bob !!
+            $user = $facade->getUser();
+            $user->logOff();
+            $facade->redirect('Login');
         }
 
         protected function handleRequestCreate(core\Request $request, core\AppFacade $facade) {
