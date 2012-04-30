@@ -11,6 +11,8 @@
             <label for="password">Password</label>
             <input type="text" name="password" />
         </div>
-        <input type="submit" name="validate" value="validate" />
+        <div class="form_row">
+            <input id="sButton" type="submit" name="validate" value="validate" />
+        </div>
     </form>
 </div>   

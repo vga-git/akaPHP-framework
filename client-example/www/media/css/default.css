@@ -1,0 +1,31 @@
+html body {
+    padding: 0px;
+    margin: 0px;
+}
+
+#aka_container {
+    min-width: 100%;
+    min-height: 100%;
+    text-align: center;
+}
+
+.form_container {
+    min-width: 500px;
+    width: 500px;
+    text-align: right;
+    background-color: lightgray;
+    clear: both;
+}
+
+.form_row {
+    min-width: 400px;
+    padding-left:24px;
+}
+
+.form_row label {
+    background-color: lightblue;
+    display: inline-block;
+    text-align: right;
+    padding-right: 4px;
+    width: 200px;
+}
