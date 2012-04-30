@@ -3,7 +3,7 @@
 namespace app\modules\login\action {
     use org\akaPHP\core;
     use \app\lib;
-    
+
     /**
     * Description of LoginAction
     *
@@ -11,36 +11,44 @@ namespace app\modules\login\action {
     */
     class LoginAction extends core\Controller {
         protected $errMsg;
-        
+
         /**
          * akaPHP implementation. Handle the request.
-         * 
+         *
          * @param core\Request   $request the request object
          * @param core\AppFacade $facade  the facade object
-         * 
+         *
          * @return void
          */
         protected function handleRequest(core\Request $request, core\AppFacade $facade) {
             if (! $request->isPostBack()) {
-                $this->setTemplate('LoginForm');    
+                $this->setTemplate('LoginForm');
             } else {
                 $email = $request->getParam('email');
                 $password = $request->getParam('password');
 
                 $user = $facade->getUser();
                 $user->setEmail($email);
-                
+
                 $this->_checkAuthentification($user, $password,$facade);
             }
         }
-        
+
+        protected function handleRequestLogoff(core\Request $request, core\AppFacade $facade) {
+            // TODO put the code bob !!
+        }
+
+        protected function handleRequestCreate(core\Request $request, core\AppFacade $facade) {
+            $this->setTemplate('LoginCreate');
+        }
+
         /**
          * Helper method to check user authentification.
-         * 
+         *
          * @param lib\User $user the user
          * @param type $password the provided password
          * @param type $facade   the facade object
-         * 
+         *
          * @return void
          */
         private function _checkAuthentification(lib\User $user, $password, $facade) {

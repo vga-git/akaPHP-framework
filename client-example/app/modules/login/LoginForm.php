@@ -1,3 +1,8 @@
+<h1>Welcome to akaPHP - DEMO</h1>
+<p>
+    To start using the demo type admin@akaphp.org:admin or
+    user user to log in.
+</p>
 <div class="form_container">
     <div class="form_error">
         <?php echo $this->errMsg ?>
@@ -12,7 +17,8 @@
             <input type="text" name="password" />
         </div>
         <div class="form_row">
-            <input id="sButton" type="submit" name="validate" value="validate" />
+            <input class="button" type="submit" name="validate" value="validate" />
         </div>
     </form>
-</div>   
+    <a href="login/create">Create a new account</a>
+</div>

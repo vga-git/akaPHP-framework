@@ -13,20 +13,16 @@ use org\akaPHP\core;
  * @author vgar
  */
 class WelcomeAction extends core\Controller {
-    
+
     protected function handleRequest(core\Request $request, core\AppFacade $facade) {
-        $user = $facade->getUser();
-        
-        if (! $user->isLogued()) {
+        $this->user = $facade->getUser();
+
+        if (! $this->user->isLogued()) {
             $facade->redirect('login');
             return;
         }
-        
-        //TODO use the request object to set the good template
+
         $this->setTemplate('Welcome');
-        
-        $nom = $request->getParam('nom');
-        $this->variable = 'bonjour monsieur ' . $nom;
     }
 }
 

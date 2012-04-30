@@ -1,2 +1,2 @@
-<h1><?php echo $this->variable; ?></h1>
+<a href="login/logoff">log out</a>
 <a href="articles">Articles</a>

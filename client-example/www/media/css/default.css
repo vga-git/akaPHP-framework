@@ -1,6 +1,12 @@
 html body {
     padding: 0px;
     margin: 0px;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-size: small;
+}
+
+h1 {
+    font-size: x-large;
 }
 
 #aka_container {
@@ -10,22 +16,34 @@ html body {
 }
 
 .form_container {
-    min-width: 500px;
-    width: 500px;
+    display: inline-block;
+    border: 1px black solid;
+    width: auto;
+    margin: auto;
+    padding: 8px;
+    margin-top: 20px;
     text-align: right;
     background-color: lightgray;
-    clear: both;
 }
 
 .form_row {
     min-width: 400px;
     padding-left:24px;
+    margin-top: 2px;
 }
 
 .form_row label {
-    background-color: lightblue;
     display: inline-block;
     text-align: right;
     padding-right: 4px;
     width: 200px;
+    height: 18px;
+}
+
+.form_row .button {
+    display: inline-block;
+    margin-top: 4px;
+    color: white;
+    background-color: gray;
+    border: 1px black solid;
 }
