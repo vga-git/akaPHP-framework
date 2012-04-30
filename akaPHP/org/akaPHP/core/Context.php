@@ -1,39 +1,39 @@
 <?php
 namespace org\akaPHP\core {
-    
-    
+
+
     /**
      * This singleton object represents the running context
      * of the web application. It holds the request and the facade
-     * object. 
+     * object.
      */
     final class Context {
         private static $_instance;
-        const 
+        const
             ROOT = 'Index.php',
             MOD_ROOT = '\\app\\modules\\';
-        
-        private 
+
+        private
             $_facade,
             $_request;
-        
+
         /**
          * Private constructor to prevent instance creation
          * from outside.
-         * 
+         *
          * @param AppFacade $facade the facade to create a context for
          */
         private function __construct(AppFacade $facade) {
             $this->_facade = $facade;
             $this->_request = new Request();
         }
-        
+
         /**
          * Entry point to the running context. If this singleton
          * is null then the optional param object AppFacade must be provided.
-         * 
+         *
          * @param AppFacade $facade optional if object was previously created
-         * 
+         *
          * @return type Context the running context
          */
         public static function getInstance(AppFacade $facade = NULL) {
@@ -42,46 +42,54 @@ namespace org\akaPHP\core {
             }
             return self::$_instance;
         }
-        
+
         /**
          * Will call the module controller that match the request_uri
          * server property. Builds the routing
-         * 
+         *
          * @return void
          */
         public function dispatch($isRedirection = false) {
-            $routing = ucfirst(str_replace('/', '', $_SERVER['REQUEST_URI']));
-            
-            if ($isRedirection) { header('Location: ' . $routing); }
-            
-            $argsStart = strpos($routing, '?');
+            $uri = $_SERVER['REQUEST_URI'];
+
+            if ($isRedirection) { header('Location: ' . $uri); }
+
+            $argsStart = strpos($uri, '?');
 
             if (is_numeric($argsStart)) {
-                $routing = substr($routing, 0, $argsStart);
+                $uri = substr($uri, 0, $argsStart);
             }
-            
-            if ($routing === self::ROOT || $routing === '') {
-                $this->_runModule('Welcome');
+
+            $routingTokens = explode('/', $uri);
+
+            $module = ucfirst($routingTokens[1]);
+            $action = '';
+            if (count($routingTokens) > 2) {
+                $action = $routingTokens[2];
+            }
+
+            if ($module === self::ROOT || $module === '') {
+                $this->_runModule('Welcome', $action);
             } else {
-                $this->_runModule($routing);
+                $this->_runModule($module, $action);
             }
         }
-        
+
         /**
          * Called by PHP when all scripts ended.
          * Do some clean up.
-         * 
-         * @return void 
+         *
+         * @return void
          */
         public function shutdown() {
             // close the database connection
             $this->getFacade()->getDatabase()->disconnect();
         }
-        
+
         /**
          *return the request object.
-         * 
-         * @return Request the request 
+         *
+         * @return Request the request
          */
         public function getRequest() {
             return $this->_request;
@@ -89,20 +97,20 @@ namespace org\akaPHP\core {
 
         /**
          * Returns the facade object
-         * 
-         * @return AppFacade the facade 
+         *
+         * @return AppFacade the facade
          */
         public function getFacade() {
             return $this->_facade;
         }
-        
+
         /**
          * Compute the controller root from the module name
          * and then calls the execute method of this controller
-         * 
+         *
          * @param string $moduleName The module name
          */
-        private function _runModule($moduleName) {
+        private function _runModule($moduleName, $actionName) {
             $subDir = strtolower($moduleName);
             $directory = ROOT_DIR . '/app/modules/' . $subDir;
 
@@ -112,7 +120,7 @@ namespace org\akaPHP\core {
             } else {
                 $class = self::MOD_ROOT . $subDir . '\\action\\' . $moduleName . 'Action';
                 $ctl = new $class();
-                $ctl->execute();
+                $ctl->execute($actionName);
             }
         }
     }

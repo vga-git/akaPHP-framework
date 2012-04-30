@@ -1,8 +1,10 @@
 <?php
 namespace org\akaPHP\core {
-    
+
+    use org\akaPHP\exceptions;
+
     /**
-     * Abstract to create a controller from 
+     * Abstract to create a controller from
      */
     abstract class Controller {
         protected
@@ -11,21 +13,21 @@ namespace org\akaPHP\core {
 
         /**
          * implementation method called in execute
-         * 
+         *
          * @param Request $request the request object
-         * 
-         * @see execute() 
-         * 
+         *
+         * @see execute()
+         *
          * @return void
          */
         protected abstract function handleRequest(Request $request, AppFacade $facade);
 
         /**
          * Execute method of the implementation
-         * 
-         * @return void 
+         *
+         * @return void
          */
-        public function execute() {
+        public function execute($actionName) {
             // top object running this method
             $runner = str_replace("\\", "/", get_class($this));
 
@@ -38,8 +40,17 @@ namespace org\akaPHP\core {
             // set some default values for the view
             $this->title="default application";
 
+            $action = 'handleRequest' . ucfirst($actionName);
+
+            if (! method_exists($this, $action)) {
+                throw new exceptions\akaException(
+                    sprintf(exceptions\akaException::ACTION_EXCEPTION, $action, $activeModule),
+                    exceptions\akaException::ACTION_EXCEPTION_NUM
+                );
+            }
+
             // calls the client implementation (the client set the template)
-            $this->handleRequest(
+            $this->$action(
                 Context::getInstance()->getRequest(),
                 Context::getInstance()->getFacade()
             );
@@ -53,9 +64,9 @@ namespace org\akaPHP\core {
 
         /**
          * Setter method to define the template
-         * 
+         *
          * @param string $template  the template name
-         * 
+         *
          * @return void
          */
         protected function setTemplate($template) {
