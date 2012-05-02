@@ -25,6 +25,13 @@ namespace app\lib {
             $ctl->user = $this->_user;
         }
 
+        public function getLayout(core\Controller $ctl) {
+            if ($ctl->getModulePath() === 'app/modules/login') {
+                return '/app/layouts/loginLayout.php';
+            }
+            return '/app/layouts/layout.php';
+        }
+
         /**
          * override of the constructor to create the user instance
          *

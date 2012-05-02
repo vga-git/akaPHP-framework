@@ -9,7 +9,9 @@ namespace org\akaPHP\core {
     abstract class Controller {
         protected
             $template = NULL,
-            $response;
+            $response,
+            $modulePath,
+            $actionName;
 
         /**
          * implementation method called in execute
@@ -23,19 +25,39 @@ namespace org\akaPHP\core {
         protected abstract function handleRequest(Request $request, AppFacade $facade);
 
         /**
+         * Returns the active module path for this controller.
+         *
+         * @return string The relative path from root of this controller
+         */
+        public function getModulePath() {
+            return $this->modulePath;
+        }
+
+        /**
+         * Returns the active action name for this controller.
+         *
+         * @return string the action name (handleRequestActionName)
+         */
+        public function getActionName() {
+            return $this->actionName;
+        }
+
+        /**
          * Execute method of the implementation
          *
          * @return void
          */
         public function execute($actionName) {
+            $this->actionName = $actionName;
+
             // top object running this method
             $runner = str_replace("\\", "/", get_class($this));
 
             $lastSlash = strrpos($runner, '/');
 
             // on client side the module must be in modules/$moduleName/action/$ModuleName.php
-            $activeModule = str_replace('/action', '', substr($runner, 0, $lastSlash));
-            $viewDir = ROOT_DIR . '/' . $activeModule . '/';
+            $this->modulePath = str_replace('/action', '', substr($runner, 0, $lastSlash));
+            $viewDir = ROOT_DIR . '/' . $this->modulePath . '/';
 
             // set some default values for the view
             $this->title="default application";
@@ -44,10 +66,11 @@ namespace org\akaPHP\core {
 
             if (! method_exists($this, $action)) {
                 throw new exceptions\akaException(
-                    sprintf(exceptions\akaException::ACTION_EXCEPTION, $action, $activeModule),
+                    sprintf(exceptions\akaException::ACTION_EXCEPTION, $action, $this->modulePath),
                     exceptions\akaException::ACTION_EXCEPTION_NUM
                 );
             }
+
 
             // calls the client implementation (the client set the template)
             $this->$action(
@@ -58,7 +81,8 @@ namespace org\akaPHP\core {
             if ($this->template) {
                 // defines the response content
                 $this->response = $viewDir . $this->template . '.php';
-                include_once(ROOT_DIR . '/app/layout.php');
+                $layoutPath = Context::getInstance()->getFacade()->getLayout($this);
+                include_once(ROOT_DIR . $layoutPath);
             }
         }
 

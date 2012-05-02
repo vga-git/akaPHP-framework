@@ -38,6 +38,15 @@ namespace org\akaPHP\core {
          */
         public abstract function setActiveController(Controller $ctl);
 
+
+        /**
+         * Must return the layout (decorator) of the current template
+         * defined in the running controller
+         *
+         * @return string the relative path (relative to ROOT) of the layout template.
+         */
+        public abstract function getLayout(Controller $ctl);
+
         /**
          * Entry point to start the application.
          *
