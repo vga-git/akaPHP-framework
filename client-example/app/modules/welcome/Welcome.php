@@ -1,2 +1,1 @@
-<a href="login/logoff">log out</a>
-<a href="articles">Articles</a>
+<h1>TODO : display last news or whatever</h1>

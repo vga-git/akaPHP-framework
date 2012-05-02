@@ -17,6 +17,9 @@ namespace org\akaPHP\core {
             $_facade,
             $_request;
 
+        protected
+            $activeController;
+
         /**
          * Private constructor to prevent instance creation
          * from outside.
@@ -127,6 +130,10 @@ namespace org\akaPHP\core {
             } else {
                 $class = self::MOD_ROOT . $subDir . '\\action\\' . $moduleName . 'Action';
                 $ctl = new $class();
+
+                // sets the active controller instance
+                $this->_facade->setActiveController($ctl);
+
                 $ctl->execute($actionName);
             }
         }

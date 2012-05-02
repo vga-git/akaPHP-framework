@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+session_start();
 // This client root
 define('ROOT_DIR', realpath(__DIR__ . '/..'));
 

@@ -27,21 +27,32 @@ namespace app\modules\login\action {
                 $email = $request->getParam('email');
                 $password = $request->getParam('password');
 
-                $user = $facade->getUser();
-                $user->setEmail($email);
+                $this->user->setEmail($email);
 
-                $this->_checkAuthentification($user, $password,$facade);
+                $this->_checkAuthentification($this->user, $password, $facade);
             }
         }
 
         protected function handleRequestLogoff(core\Request $request, core\AppFacade $facade) {
             $user = $facade->getUser();
             $user->logOff();
-            $facade->redirect('Login');
+            $facade->redirect('login');
         }
 
         protected function handleRequestCreate(core\Request $request, core\AppFacade $facade) {
-            $this->setTemplate('LoginCreate');
+            if (! $request->isPostBack()) {
+                $this->setTemplate('LoginCreate');
+            } else {
+                $user = new lib\User();
+                $user->setEmail($request->getParam('email'));
+                $success = $user->save($request->getParam('password'));
+                if ($success) {
+                     $facade->redirect();
+                } else {
+                    echo 'oups';
+                    die();
+                }
+            }
         }
 
         /**

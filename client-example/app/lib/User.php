@@ -6,12 +6,12 @@ namespace app\lib {
         private $_email;
 
         public function __construct() {
-            session_start();
             $this->_initialize();
         }
 
         public function isLogued() {
-            return strlen($this->_email) > 0;
+            return isset($_SESSION['user_email']) &&
+                    $_SESSION['user_email'] === $this->_email;
         }
 
         public function logOff() {
@@ -32,11 +32,23 @@ namespace app\lib {
             }
 
             $row = $results->fetch();
-            if ($row && $row['member']) {
+            if ($row && $row['member'] && count($row['member']) == 1) {
                 $_SESSION['user_email'] = $this->_email;
                 return true;
             }
             return false;
+        }
+
+        public function save($password) {
+            $db = core\Context::getInstance()->getFacade()->getDatabase();
+            $db->connect();
+
+            $sql = 'insert into users(email, password) ';
+            $sql .= 'values("' . $this->_email . '","' . $password . '")';
+            $query = $db->getDbh()->prepare($sql);
+            $query->execute();
+
+            return true;
         }
 
         public function getEmail() {

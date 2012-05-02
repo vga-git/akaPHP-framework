@@ -28,6 +28,17 @@ namespace org\akaPHP\core {
         }
 
         /**
+         * the active controller instance that is about to be executed.
+         * Allows the real facade to interact with the controller before
+         * the execute method is call.
+         *
+         * @param Controller $ctl the active controller instance
+         *
+         * @return void
+         */
+        public abstract function setActiveController(Controller $ctl);
+
+        /**
          * Entry point to start the application.
          *
          * @return void
@@ -40,7 +51,7 @@ namespace org\akaPHP\core {
             });
         }
 
-        public function redirect($routing) {
+        public function redirect($routing = '') {
             $_SERVER['REQUEST_URI'] = $routing;
             Context::getInstance()->shutdown();
             header('Location: ' . 'http://' . $_SERVER['SERVER_NAME'] . '/' . urldecode($routing), true);

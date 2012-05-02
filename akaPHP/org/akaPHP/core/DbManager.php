@@ -1,25 +1,29 @@
 <?php
 namespace org\akaPHP\core {
     class DbManager {
-        
-        protected 
+
+        protected
             $config,
             $isConnected,
             $connection;
 
         /**
          * Database manager object to manage connection.
-         * 
+         *
          * @param array $config the configuration for the database.
          */
         public function __construct(array $config) {
             $this->config = $config;
         }
 
+        public function getDbh() {
+            return $this->connection;
+        }
+
         /**
          * Will open the connection if it is not already open.
-         * 
-         * @return void 
+         *
+         * @return void
          */
         public function connect() {
             if (! $this->isConnected) {
@@ -29,10 +33,10 @@ namespace org\akaPHP\core {
 
         /**
          * Executes a raw query from the open connection.
-         * 
+         *
          * @param string $query the sql query
-         * 
-         * @return PDO_Result the results 
+         *
+         * @return PDO_Result the results
          */
         public function execute($query) {
             $this->connect();
@@ -42,8 +46,8 @@ namespace org\akaPHP\core {
 
         /**
          * Will disconnect from the database if it is connected
-         * 
-         * @return void 
+         *
+         * @return void
          */
         public function disconnect() {
             if ($this->isConnected) {
@@ -54,18 +58,18 @@ namespace org\akaPHP\core {
         /**
          * Actually connects to the database with the config settings
          * given in the constructor method
-         * 
-         * @return void 
+         *
+         * @return void
          */
         private function _doConnect() {
             if (! $this->connection) {
                 $this->connection = new \PDO(
                     sprintf(
-                        "mysql:host=%s;dbname=%s", 
-                        $this->config['host'], 
+                        "mysql:host=%s;dbname=%s",
+                        $this->config['host'],
                         $this->config['database']
                     ),
-                    $this->config['user'], 
+                    $this->config['user'],
                     $this->config["password"]
                 );
             }
@@ -74,8 +78,8 @@ namespace org\akaPHP\core {
 
         /**
          * Will set the PDO handle to null
-         * 
-         * @return void 
+         *
+         * @return void
          */
         private function _doDisconnect() {
             $this->connection = null;

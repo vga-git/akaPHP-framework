@@ -15,8 +15,6 @@ use org\akaPHP\core;
 class WelcomeAction extends core\Controller {
 
     protected function handleRequest(core\Request $request, core\AppFacade $facade) {
-        $this->user = $facade->getUser();
-
         if (! $this->user->isLogued()) {
             $facade->redirect('login');
             return;
