@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>590</x>
+      <y>480</y>
+      <w>250</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>/AppFacade/
+Package::org.akaPHP.core
+--
+#config
+--
++&lt;&lt;construct&gt;&gt;(config:Config)
+/+setActiveController(ctl: Controller)/
+/+getLayout(ctl: Controller):string/
++startup()
++redirect(routing:string)
++getDatabase():DbManager
++getConfig():Config
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>10</x>
+      <y>280</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>/Config/
+Package::org.akaPHP.core
+--
+/+getDatabaseInfo():array/
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>230</x>
+      <y>30</y>
+      <w>340</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Context
+Package:org.akaPHP.core
+--
+_ROOT_
+_MOD_ROOT_
+--
+_-_instance_
+--
+-&lt;&lt;construct&gt;&gt;(facade:AppFacade)
+_+getInstance(facade:AppFacade = null):Context_
++dispatch(isRedirection:boolean = false)
++shutdown()
++getRequest()
++getFacade()
+-_runModule($moduleName:string, $actionName:string)
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>10</x>
+      <y>360</y>
+      <w>310</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>/Controller/
+Package:org.akaPHP.core
+--
+#template:string = null
+#response:string
+#modulePath:string
+#actionName:string
+--
+/#handleRequest(request:Request, facade: AppFacade)/
++getModulePath():string
++getActionName():string
++execute(actionName:string)
+#setTemplate(template:string)
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>590</x>
+      <y>30</y>
+      <w>200</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>DbManager
+Package:org.akaPHP.core
+--
+#config:Config
+#isConnected:boolean
+#connection:PDO
+--
++&lt;&lt;construct&gt;&gt;(config:array)
++getDbh():PDO
++connect()
++execute():array
++disconnect()
+-_doConnect()
+-_doDisconnect()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>10</x>
+      <y>30</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Loader
+--
+-_routes:array
+_-loader:Loader_
+--
++&lt;&lt;construct&gt;&gt;()
++addRoute(rootPath:string)
+_+init()_
++autoload()
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>590</x>
+      <y>270</y>
+      <w>270</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Request
+--
+_GET_
+_POST_
+-_params:array
+-_reqMethod:string
+--
++&lt;&lt;construct&gt;&gt;
++hasParam():boolean
++isPostBack():boolean
++getParam(paramName:string):string
+-_initializeRequest()</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
