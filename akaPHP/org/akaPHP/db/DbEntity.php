@@ -3,7 +3,7 @@ namespace org\akaPHP\db {
     use org\akaPHP\exceptions;
     use org\akaPHP\interfaces;
 
-    abstract class DbEntity implements interfaces\IDbEntity {
+    abstract class DbEntity {
         protected
             $id,
             $tableName,
@@ -16,7 +16,7 @@ namespace org\akaPHP\db {
         }
 
         public abstract function getFields();
-
+            
         public abstract function getTableName();
 
         public abstract function newInstance();

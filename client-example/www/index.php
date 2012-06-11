@@ -17,5 +17,6 @@ $loader->addRoute(ROOT_DIR . '/../akaPHP');
 
 //startup Application
 $appFacade = new lib\ApplicationFacade();
+
 $appFacade->startup();
 ?>

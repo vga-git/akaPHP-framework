@@ -35,7 +35,11 @@ namespace app\modules\login\action {
                 $user->setPassword($this->request->getParam('password'));
 
                 $results = $dbManager->load($user);
-                $user = $results[0];
+                
+                if (count($results) > 0) {
+                    $user = $results[0];    
+                }
+                
                 $this->errMsg = '';
                 if ($user->getId()) {
                     $this->facade->storeToSession(

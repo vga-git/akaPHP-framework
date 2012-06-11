@@ -12,8 +12,8 @@ h1 {
 
 table tr td {
     border: 1px black solid;
-    margin: 8px;
-    padding: 2px;
+    margin: 4px;
+    padding: 4px;
 }
 
 #aka_container {
@@ -53,4 +53,9 @@ table tr td {
     color: white;
     background-color: gray;
     border: 1px black solid;
+}
+
+.aka_menu {
+    display: block;
+    margin: 4px;
 }

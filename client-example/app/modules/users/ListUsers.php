@@ -2,6 +2,7 @@
     <tr>
         <td>User email</td>
         <td>Password</td>
+        <td>actions</td>
     </tr>
     <?php foreach($this->users as $user): ?>
     <tr>

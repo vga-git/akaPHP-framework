@@ -40,10 +40,10 @@ namespace org\akaPHP\db {
                 $isAnd = true;
                 $params[$paramValue] = $value;
             }
-
+            
             $results = $this->database->query($baseSql, $params);
             $this->_isFetching = true;
-
+            
             foreach ($results as $result) {
                 $element = $entity->newInstance();
                 $element->setId($result['id'], $this);

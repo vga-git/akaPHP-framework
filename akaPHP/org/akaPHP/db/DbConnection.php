@@ -21,8 +21,10 @@ namespace org\akaPHP\db {
 
         public abstract function doDisconnect();
 
-        public abstract function execute($rawSql);
-
+        public function execute($rawSql) {
+            echo $rawSql;
+        }
+        
         public function connect() {
             if (! $this->isConnected()) {
                 $this->doConnect();
