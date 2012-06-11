@@ -65,7 +65,11 @@ namespace app\lib {
             if (isset($_SESSION[self::USER_SESSION_KEY])) {
                 $this->_user->setEmail($_SESSION[self::USER_SESSION_KEY]);
                 $entities = $this->getDbManager()->load($this->_user);
-                $this->_user = $entities[0];
+                if (count($entities) === 1) {
+                    $this->_user = $entities[0];
+                } else {
+                    $this->removeFromSession(self::USER_SESSION_KEY);
+                }
             }
         }
 

@@ -21,16 +21,8 @@ namespace org\akaPHP\db {
         public function load(DbEntity $entity) {
             $ayOfEntities = array();
             $baseSql = sprintf('SELECT * FROM %s', $entity->getTableName());
-            $wheres = array();
+            $wheres = $entity->toArray(false);
 
-            $fields = $entity->getFields();
-            foreach (array_keys($fields) as $column) {
-                $getter = 'get' . ucfirst($column);
-                $value = $entity->$getter();
-                if ($value) {
-                    $wheres[$column] = $value;
-                }
-            }
             $isAnd = false;
             $params = array();
 
@@ -40,15 +32,18 @@ namespace org\akaPHP\db {
                 $isAnd = true;
                 $params[$paramValue] = $value;
             }
-            
+
             $results = $this->database->query($baseSql, $params);
+            if (! $results) {
+                return array();
+            }
             $this->_isFetching = true;
-            
+
             foreach ($results as $result) {
                 $element = $entity->newInstance();
-                $element->setId($result['id'], $this);
+                $element->setId($result['id']);
 
-                foreach (array_keys($fields) as $column) {
+                foreach (array_keys($entity->getFields()) as $column) {
                     $setter = 'set' . ucfirst($column);
                     $element->$setter($result[$column]);
                 }
@@ -87,10 +82,9 @@ namespace org\akaPHP\db {
         }
 
         public function delete(DbEntity $entity) {
-
+            $baseSql = sprintf('DELETE FROM %s WHERE id = %s', $entity->getTableName(), $entity->getId());
+            $this->database->execute($baseSql);
         }
-
-
     }
 }
 ?>

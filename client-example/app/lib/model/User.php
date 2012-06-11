@@ -25,14 +25,14 @@ namespace app\lib\model {
             return $this->_password;
         }
 
-        public function getFields() {
+        public static function getFields() {
             return array (
                 'email' => new db\DbTypeString(),
                 'password' => new db\DbTypeString()
             );
         }
 
-        public function getTableName() {
+        public static function getTableName() {
             return "user";
         }
 

@@ -35,7 +35,7 @@ namespace org\akaPHP\db {
 
         }
 
-        public function query($sql, array $params) {
+        public function query($sql, array $params = null) {
             $this->doConnect();
 
             $statement = $this->connection->prepare($sql);
