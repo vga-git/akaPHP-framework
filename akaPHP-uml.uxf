@@ -5,7 +5,7 @@
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>590</x>
-      <y>480</y>
+      <y>450</y>
       <w>250</w>
       <h>150</h>
     </coordinates>
@@ -30,7 +30,7 @@ Package::org.akaPHP.core
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>10</x>
-      <y>280</y>
+      <y>250</y>
       <w>190</w>
       <h>50</h>
     </coordinates>
@@ -45,7 +45,7 @@ bg=orange</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>230</x>
-      <y>30</y>
+      <y>0</y>
       <w>340</w>
       <h>180</h>
     </coordinates>
@@ -71,7 +71,7 @@ bg=light_gray</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>10</x>
-      <y>360</y>
+      <y>330</y>
       <w>310</w>
       <h>160</h>
     </coordinates>
@@ -95,7 +95,7 @@ bg=orange</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>590</x>
-      <y>30</y>
+      <y>0</y>
       <w>200</w>
       <h>170</h>
     </coordinates>
@@ -121,7 +121,7 @@ Package:org.akaPHP.core
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>10</x>
-      <y>30</y>
+      <y>100</y>
       <w>200</w>
       <h>110</h>
     </coordinates>
@@ -141,7 +141,7 @@ bg=light_gray</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>590</x>
-      <y>270</y>
+      <y>240</y>
       <w>270</w>
       <h>150</h>
     </coordinates>
@@ -158,5 +158,46 @@ _POST_
 +getParam(paramName:string):string
 -_initializeRequest()</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>280</x>
+      <y>540</y>
+      <w>180</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>IConnectionRes
+Package::org.akaPHP.interfaces
+--
+connect()
+disconnect()
+isConnected()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>440</x>
+      <y>660</y>
+      <w>260</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>ConnectionRes
+package::org.akaPHP.core
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>400</x>
+      <y>570</y>
+      <w>190</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;170;90</additional_attributes>
   </element>
 </diagram>

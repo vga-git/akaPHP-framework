@@ -1,7 +1,7 @@
 <?php
 namespace org\akaPHP\core {
 
-    use org\akaPHP\exceptions;
+    use org\akaPHP\exceptions\AkaException;
 
     /**
      * Abstract to create a controller from
@@ -11,7 +11,18 @@ namespace org\akaPHP\core {
             $template = NULL,
             $response,
             $modulePath,
-            $actionName;
+            $actionName,
+            $request,
+            $facade;
+
+        /**
+         * method called before any request handling is proceed by client
+         */
+        protected function prepare() {
+            // default shortcuts to request and facade object
+            $this->request = Context::getInstance()->getRequest();
+            $this->facade = Context::getInstance()->getFacade();
+        }
 
         /**
          * implementation method called in execute
@@ -22,7 +33,7 @@ namespace org\akaPHP\core {
          *
          * @return void
          */
-        protected abstract function handleRequest(Request $request, AppFacade $facade);
+        protected abstract function handleRequest();
 
         /**
          * Returns the active module path for this controller.
@@ -65,18 +76,17 @@ namespace org\akaPHP\core {
             $action = 'handleRequest' . ucfirst($actionName);
 
             if (! method_exists($this, $action)) {
-                throw new exceptions\akaException(
-                    sprintf(exceptions\akaException::ACTION_EXCEPTION, $action, $this->modulePath),
-                    exceptions\akaException::ACTION_EXCEPTION_NUM
+                throw new AkaException(
+                    sprintf(AkaException::ACTION_EXCEPTION, $action, $this->modulePath),
+                    AkaException::ACTION_EXCEPTION_NUM
                 );
             }
 
+            //this method is called prior to any handling request on client side
+            $this->prepare();
 
             // calls the client implementation (the client set the template)
-            $this->$action(
-                Context::getInstance()->getRequest(),
-                Context::getInstance()->getFacade()
-            );
+            $this->$action();
 
             if ($this->template) {
                 // defines the response content

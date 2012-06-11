@@ -1,15 +1,18 @@
 <?php
 
 namespace app\modules\login\action {
-    use org\akaPHP\core;
-    use \app\lib;
+    use org\akaPHP\core\Controller;
+    use org\akaPHP\core\Request;
+    use org\akaPHP\core\AppFacade;
+    use app\lib\model\User;
+    use app\lib\ApplicationFacade;
 
     /**
     * Description of LoginAction
     *
     * @author vgar
     */
-    class LoginAction extends core\Controller {
+    class LoginAction extends Controller {
         protected $errMsg;
 
         /**
@@ -20,57 +23,53 @@ namespace app\modules\login\action {
          *
          * @return void
          */
-        protected function handleRequest(core\Request $request, core\AppFacade $facade) {
-            if (! $request->isPostBack()) {
+        protected function handleRequest() {
+           if (! $this->request->isPostBack()) {
                 $this->setTemplate('LoginForm');
             } else {
-                $email = $request->getParam('email');
-                $password = $request->getParam('password');
+                $dbManager = $this->facade->getDbManager();
 
-                $this->user->setEmail($email);
+                $user = new User();
 
-                $this->_checkAuthentification($this->user, $password, $facade);
-            }
-        }
+                $user->setEmail($this->request->getParam('email'));
+                $user->setPassword($this->request->getParam('password'));
 
-        protected function handleRequestLogoff(core\Request $request, core\AppFacade $facade) {
-            $user = $facade->getUser();
-            $user->logOff();
-            $facade->redirect('login');
-        }
-
-        protected function handleRequestCreate(core\Request $request, core\AppFacade $facade) {
-            if (! $request->isPostBack()) {
-                $this->setTemplate('LoginCreate');
-            } else {
-                $user = new lib\User();
-                $user->setEmail($request->getParam('email'));
-                $success = $user->save($request->getParam('password'));
-                if ($success) {
-                     $facade->redirect();
+                $results = $dbManager->load($user);
+                $user = $results[0];
+                $this->errMsg = '';
+                if ($user->getId()) {
+                    $this->facade->storeToSession(
+                        ApplicationFacade::USER_SESSION_KEY,
+                        $user->getEmail()
+                    );
+                    $this->facade->redirect('Welcome');
                 } else {
-                    echo 'oups';
-                    die();
+                    $this->errMsg = 'Login fail. Please try again';
+                    $this->setTemplate('LoginForm');
                 }
             }
         }
 
-        /**
-         * Helper method to check user authentification.
-         *
-         * @param lib\User $user the user
-         * @param type $password the provided password
-         * @param type $facade   the facade object
-         *
-         * @return void
-         */
-        private function _checkAuthentification(lib\User $user, $password, $facade) {
-            $this->errMsg = '';
-            if ($user->authenticate($password)) {
-                $facade->redirect('Welcome');
+        protected function handleRequestLogoff() {
+            $this->facade->removeFromSession(ApplicationFacade::USER_SESSION_KEY);
+            $this->facade->redirect('login');
+        }
+
+        protected function handleRequestCreate() {
+            if (! $this->request->isPostBack()) {
+                $this->setTemplate('LoginCreate');
             } else {
-                $this->errMsg = 'Login fail. Please try again';
-                $this->setTemplate('LoginForm');
+                $user = new User();
+                $user->setEmail($this->request->getParam('email'));
+                $user->setPassword($this->request->getParam('password'));
+                $db = $this->facade->getDbManager();
+                $success = $db->save($user);
+                if ($success) {
+                     $this->facade->redirect();
+                } else {
+                    echo 'oups';
+                    die();
+                }
             }
         }
     }

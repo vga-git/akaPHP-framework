@@ -4,28 +4,48 @@
  * and open the template in the editor.
  */
 namespace app\lib {
-    use org\akaPHP\core;
+    use org\akaPHP\core\Controller;
+    use org\akaPHP\core\AppFacade;
+    use org\akaPHP\core\Config;
+    use org\akaPHP\db\MySqlConnection;
+    use org\akaPHP\db\DbManager;
+    use app\lib\model\User;
+    use org\akaPHP\db\Info;
 
     /**
     * Description of ApplicationFacade
     *
     * @author vgar
     */
-    class ApplicationFacade extends core\AppFacade {
+    class ApplicationFacade extends AppFacade {
+        const
+            USER_SESSION_KEY = 'user_email';
+
         private $_user;
+
+        protected function initDbManager() {
+            $info = new Info(
+                'localhost',
+                'akaPHP',
+                'akaPHP',
+                'akaPHP'
+            );
+            $mysql = new MySqlConnection($info);
+            return new DbManager($mysql);
+        }
 
         /**
          * Implement the method to set variables shared across all controllers.
          *
-         * @param core\Controller $ctl the controller instance
+         * @param Controller $ctl the controller instance
          *
          * @return void
          */
-        public function setActiveController(core\Controller $ctl) {
+        public function setActiveController(Controller $ctl) {
             $ctl->user = $this->_user;
         }
 
-        public function getLayout(core\Controller $ctl) {
+        public function getLayout(Controller $ctl) {
             if ($ctl->getModulePath() === 'app/modules/login') {
                 return '/app/layouts/loginLayout.php';
             }
@@ -39,9 +59,22 @@ namespace app\lib {
          *
          * @return void
          */
-        public function __construct(core\Config $config) {
-            parent::__construct($config);
+        public function __construct() {
+            parent::__construct();
             $this->_user = new User();
+            if (isset($_SESSION[self::USER_SESSION_KEY])) {
+                $this->_user->setEmail($_SESSION[self::USER_SESSION_KEY]);
+                $entities = $this->getDbManager()->load($this->_user);
+                $this->_user = $entities[0];
+            }
+        }
+
+        public function storeToSession($key, $value) {
+            $_SESSION[self::USER_SESSION_KEY] = $value;
+        }
+
+        public function removeFromSession($key) {
+            unset($_SESSION[$key]);
         }
 
         /**

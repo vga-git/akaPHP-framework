@@ -10,7 +10,8 @@ namespace org\akaPHP\core {
      * @copyright akaPHP framework 2011 - 2012
      */
     abstract class AppFacade {
-        protected $config;
+        protected
+            $dbManager;
 
         /**
          * Application facade contructor. The Config object contains
@@ -22,10 +23,11 @@ namespace org\akaPHP\core {
          *
          * @return void
          */
-        public function __construct(Config $config) {
-            $this->config = $config;
-            $this->database = new DbManager($config->getDatabaseInfo());
+        public function __construct() {
+            $this->dbManager = $this->initDbManager();
         }
+
+        protected abstract function initDbManager();
 
         /**
          * the active controller instance that is about to be executed.
@@ -56,32 +58,24 @@ namespace org\akaPHP\core {
             Context::getInstance($this)->dispatch();
 
             register_shutdown_function(function() {
-                Context::getInstance()->shutdown();
+                Context::getInstance()->cleanup();
             });
         }
 
         public function redirect($routing = '') {
             $_SERVER['REQUEST_URI'] = $routing;
-            Context::getInstance()->shutdown();
+            Context::getInstance()->cleanup();
             header('Location: ' . 'http://' . $_SERVER['SERVER_NAME'] . '/' . urldecode($routing), true);
         }
 
         /**
-         * Returns the DbManager instance or its derivate one
+         * returns the db manager
          *
-         * @return DbManager the Database manager instance
+         * @return \org\akaPHP\db\DbManager the db manager
          */
-        public function getDatabase() {
-            return $this->database;
-        }
+        public function getDbManager() {
+            return $this->dbManager;
 
-        /**
-         * Returns the configuration object.
-         *
-         * @return Config the configuration object
-         */
-        public function getConfig() {
-            return $this->config;
         }
     }
 }

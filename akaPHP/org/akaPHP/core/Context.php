@@ -91,9 +91,9 @@ namespace org\akaPHP\core {
          *
          * @return void
          */
-        public function shutdown() {
-            // close the database connection
-            $this->getFacade()->getDatabase()->disconnect();
+        public function cleanup() {
+            // close the database connection ?
+
         }
 
         /**
