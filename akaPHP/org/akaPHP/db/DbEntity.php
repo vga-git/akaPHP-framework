@@ -8,22 +8,14 @@ namespace org\akaPHP\db {
             $id,
             $isDirty;
 
-        protected static
-            $fields = array(),
-            $tableName = '#err';
-
-        public function __construct() {
-            $this->id = null;
+        public function __construct($id = null) {
+            $this->id = $id;
             $this->isDirty = false;
         }
 
-        public static function getFields() {
-            return static::$fields;
-        }
+        public abstract function getFields();
 
-        public static function getTableName() {
-            return static::$tableName;
-        }
+        public abstract function getTableName();
 
         public abstract function newInstance();
 

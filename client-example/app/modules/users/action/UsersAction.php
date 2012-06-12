@@ -26,9 +26,7 @@ namespace app\modules\users\action {
 
         protected function handleRequestDelete() {
             $user_id = $this->request->getParam('id');
-            $user = new model\User();
-            $user->setId($user_id);
-            $this->dbManager->delete($user);
+            $this->dbManager->delete(new model\User($user_id));
             $this->facade->redirect('users');
         }
     }
