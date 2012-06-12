@@ -23,18 +23,6 @@ namespace org\akaPHP\db {
             $this->connection = null;
         }
 
-        public function execute($rawSql) {
-            $this->doConnect();
-
-            $pdoObject = $this->connection->query($rawSql);
-            if ($pdoObject) {
-                // type = PDOStatement
-                return $pdoObject->fetchAll();
-            }
-            return null;
-
-        }
-
         public function query($sql, array $params = null) {
             $this->doConnect();
 

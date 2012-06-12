@@ -21,22 +21,14 @@ namespace org\akaPHP\db {
         public function load(DbEntity $entity) {
             $ayOfEntities = array();
             $baseSql = sprintf('SELECT * FROM %s', $entity->getTableName());
-            $wheres = $entity->toArray(false);
-
-            $isAnd = false;
-            $params = array();
-
-            foreach($wheres as $key => $value) {
-                $paramValue = ':' . $key;
-                $baseSql .= sprintf(' %s %s = %s', $isAnd ? 'AND' : 'WHERE', $key, $paramValue);
-                $isAnd = true;
-                $params[$paramValue] = $value;
-            }
+            $params = $this->buildParams($entity, &$baseSql);
 
             $results = $this->database->query($baseSql, $params);
+
             if (! $results) {
                 return array();
             }
+
             $this->_isFetching = true;
 
             foreach ($results as $result) {
@@ -65,25 +57,45 @@ namespace org\akaPHP\db {
             $fields  = $entity->getFields();
             $values  = array();
             $columns = array();
+            $params  = array();
 
             foreach (array_keys($fields) as $column) {
                 $getter = 'get' . ucfirst($column);
                 $value = $entity->$getter();
                 if ($value) {
                     $columns[] = $column;
-                    $values[]  = $fields[$column]->format($value);
+                    $values[]  = ':' . $column;
+                    $params[$column]  = $value;
                 }
             }
 
             $baseSql .= implode(',', $columns) . ')';
-            $baseSql .= ' VALUES(' . implode(',', $values) . ')';
-            $this->database->execute($baseSql);
+            $baseSql .= ' VALUES(' . implode(', ', $values) . ')';
+
+            $this->database->query($baseSql, $params);
+
             return true;
         }
 
         public function delete(DbEntity $entity) {
-            $baseSql = sprintf('DELETE FROM %s WHERE id = %s', $entity->getTableName(), $entity->getId());
-            $this->database->execute($baseSql);
+            $baseSql = sprintf('DELETE FROM %s', $entity->getTableName());
+            $params = $this->buildParams($entity, &$baseSql);
+            $this->database->query($baseSql, $params);
+        }
+
+        protected function buildParams(DbEntity $entity, &$baseSql) {
+            $wheres = $entity->toArray(false);
+
+            $isAnd = false;
+            $params = array();
+
+            foreach($wheres as $key => $value) {
+                $paramValue = ':' . $key;
+                $baseSql .= sprintf(' %s %s = %s', $isAnd ? 'AND' : 'WHERE', $key, $paramValue);
+                $isAnd = true;
+                $params[$paramValue] = $value;
+            }
+            return $params;
         }
     }
 }

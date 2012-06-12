@@ -35,8 +35,13 @@ namespace org\akaPHP\db {
         public function toArray($includeNullValues = true) {
             $results = array();
 
-            $fields = $this->getFields();
-
+            $fields = array_merge(
+                array (
+                    'id' => new DbTypeInt()
+                ),
+                $this->getFields()
+            );
+            
             foreach (array_keys($fields) as $column) {
                 $getter = 'get' . ucfirst($column);
                 $value = $this->$getter();

@@ -5,7 +5,6 @@ namespace org\akaPHP\interfaces {
         function connect();
         function disconnect();
         function isConnected();
-        function execute($rawSql);
     }
 }
 ?>
