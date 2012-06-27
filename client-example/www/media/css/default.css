@@ -59,3 +59,36 @@ table tr td {
     display: block;
     margin: 4px;
 }
+
+.aka_menu ul {
+    list-style-type: none;
+    background-image: url('../images/navi_bg.png');
+    height: 80px;
+    width: 664px;
+    margin: auto;
+}
+
+.aka_menu li {
+    float: left;
+}
+
+.aka_menu ul a {
+    background-image: url(navi_bg_divider.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    padding-right: 16px;
+    padding-left: 16px;
+    display: block;
+    margin-top: 12px;
+    margin-left: 4px;
+    line-height: 48px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #99ccff;
+}
+
+.aka_menu ul a:hover {
+    color: white;
+    background-color: #666666;
+    border: 1px black solid;
+}

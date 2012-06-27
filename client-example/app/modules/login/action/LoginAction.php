@@ -18,9 +18,6 @@ namespace app\modules\login\action {
         /**
          * akaPHP implementation. Handle the request.
          *
-         * @param core\Request   $request the request object
-         * @param core\AppFacade $facade  the facade object
-         *
          * @return void
          */
         protected function handleRequest() {
@@ -29,10 +26,7 @@ namespace app\modules\login\action {
             } else {
                 $dbManager = $this->facade->getDbManager();
 
-                $user = new User();
-
-                $user->setEmail($this->request->getParam('email'));
-                $user->setPassword($this->request->getParam('password'));
+                $user = $this->_getUserFromParams();
 
                 $results = $dbManager->load($user);
 
@@ -63,9 +57,7 @@ namespace app\modules\login\action {
             if (! $this->request->isPostBack()) {
                 $this->setTemplate('LoginCreate');
             } else {
-                $user = new User();
-                $user->setEmail($this->request->getParam('email'));
-                $user->setPassword($this->request->getParam('password'));
+                $user = $this->_getUserFromParams();
                 $db = $this->facade->getDbManager();
                 $success = $db->save($user);
                 if ($success) {
@@ -75,6 +67,12 @@ namespace app\modules\login\action {
                     die();
                 }
             }
+        }
+        private function _getUserFromParams() {
+            $user = new User();
+            $user->setEmail($this->request->getParam('email'));
+            $user->setPassword($this->request->getParam('password'));
+            return $user;
         }
     }
 }
